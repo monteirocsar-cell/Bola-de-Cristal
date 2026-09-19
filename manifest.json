@@ -1,0 +1,18 @@
+{
+  "name": "Bola de Cristal - Levados Fly",
+  "short_name": "Bola de Cristal",
+  "description": "Vento, umidade, pressão e tendência para rampas de voo livre do Sudeste do Brasil.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f1e8",
+  "theme_color": "#1d5c74",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

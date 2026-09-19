@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bola de Cristal - Levados Fly</title>
+<meta name="description" content="Vento, umidade, pressão e tendência para rampas de voo livre do Sudeste do Brasil.">
+<meta name="theme-color" content="#1d5c74">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bola de Cristal">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f1e8; --surface:#ffffff; --surface-2:#ece6d8;
+  --ink:#1c2a2e; --ink-soft:#4d5d61; --ink-mute:#83918f; --line:#dcd3bf;
+  --accent:#1d5c74; --accent-ink:#ffffff; --sun:#e2984f;
+  --good:#3f9c6e; --good-bg:#e4f3e8; --warn:#c98a2e; --warn-bg:#faf0dc;
+  --bad:#c0503f; --bad-bg:#f9e6e1; --mute-badge-bg:#e9e4d6;
+  --shadow:0 1px 2px rgba(28,42,46,.06),0 6px 20px -8px rgba(28,42,46,.18);
+  --radius:14px; color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#10191b; --surface:#182426; --surface-2:#1f2d30;
+    --ink:#eef2ee; --ink-soft:#aebcbb; --ink-mute:#7b8b8a; --line:#2c3a3c;
+    --accent:#5aa9c4; --accent-ink:#0a1516; --sun:#e8a866;
+    --good:#63c090; --good-bg:#173325; --warn:#d9a54c; --warn-bg:#3a2f16;
+    --bad:#e17a68; --bad-bg:#3a1f1b; --mute-badge-bg:#26302f;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -10px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10191b; --surface:#182426; --surface-2:#1f2d30;
+  --ink:#eef2ee; --ink-soft:#aebcbb; --ink-mute:#7b8b8a; --line:#2c3a3c;
+  --accent:#5aa9c4; --accent-ink:#0a1516; --sun:#e8a866;
+  --good:#63c090; --good-bg:#173325; --warn:#d9a54c; --warn-bg:#3a2f16;
+  --bad:#e17a68; --bad-bg:#3a1f1b; --mute-badge-bg:#26302f;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -10px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Karla',system-ui,sans-serif;
+  padding-inline:16px; padding-block:0 28px;
+  max-width:560px; margin-inline:auto;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:calc(28px + env(safe-area-inset-bottom,0px));
+}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;margin:0;text-wrap:balance;}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+a{color:var(--accent);}
+button{font-family:inherit;}
+[hidden]{display:none!important;}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding-top:18px;padding-bottom:10px;z-index:5;}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
+.brand h1{font-size:1.5rem;letter-spacing:-.01em;}
+.brand .tag{font-size:.72rem;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.08em;}
+.back{background:none;border:none;color:var(--accent);font-weight:700;font-size:.85rem;cursor:pointer;padding:6px 0;}
+
+.search-wrap{position:relative;margin-top:12px;}
+.search-input{
+  width:100%;padding:11px 14px;border-radius:12px;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink);font-size:.92rem;
+}
+.search-input:focus{outline:2px solid var(--accent);outline-offset:1px;}
+
+.state-chips{display:flex;gap:6px;overflow-x:auto;padding:10px 0 2px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.state-chips::-webkit-scrollbar{display:none;}
+.chip{
+  flex:0 0 auto;padding:6px 12px;border-radius:999px;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink-soft);font-weight:600;font-size:.76rem;cursor:pointer;white-space:nowrap;
+}
+.chip[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
+
+main{padding-top:6px;}
+
+/* ---- list view ---- */
+.site-card{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:12px 14px;margin-bottom:8px;cursor:pointer;
+}
+.site-card .name{font-weight:700;font-size:.92rem;display:flex;align-items:center;flex-wrap:wrap;gap:6px;row-gap:4px;}
+.site-card .city{font-size:.76rem;color:var(--ink-mute);margin-top:2px;}
+.site-card .quad{font-size:.68rem;color:var(--ink-mute);margin-top:3px;}
+.site-card .go{color:var(--ink-mute);font-size:1.1rem;}
+.tag-pill{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 7px;border-radius:999px;background:var(--mute-badge-bg);color:var(--ink-mute);white-space:nowrap;}
+.tag-pill.full{background:var(--good-bg);color:var(--good);}
+.empty-note{font-size:.82rem;color:var(--ink-mute);padding:20px 4px;text-align:center;}
+.geo-hint{font-size:.78rem;color:var(--ink-mute);padding:6px 2px 14px;}
+.geo-btn{
+  display:block;width:100%;margin-top:6px;padding:11px;border-radius:12px;border:1px dashed var(--line);
+  background:var(--surface);color:var(--accent);font-weight:700;font-size:.85rem;cursor:pointer;
+}
+.section-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-mute);margin:14px 2px 6px;}
+
+/* ---- detail view ---- */
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:14px;}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+.hero-site h2{font-size:1.15rem;}
+.hero-site .sub{color:var(--ink-mute);font-size:.8rem;margin-top:3px;max-width:34ch;}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-weight:700;font-size:.78rem;white-space:nowrap;}
+.badge.bom{background:var(--good-bg);color:var(--good);}
+.badge.moderado{background:var(--warn-bg);color:var(--warn);}
+.badge.nao{background:var(--bad-bg);color:var(--bad);}
+.badge.semdado{background:var(--mute-badge-bg);color:var(--ink-mute);}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor;}
+.hero-metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:16px;}
+.metric{background:var(--surface-2);border-radius:10px;padding:9px 4px;text-align:center;}
+.metric .v{font-size:.98rem;font-weight:600;}
+.metric .l{font-size:.58rem;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+.hero-reason{margin-top:12px;font-size:.82rem;color:var(--ink-soft);}
+.hero-reason b{color:var(--ink);}
+.trend-line{margin-top:10px;display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--ink-soft);}
+.trend-line svg{flex:0 0 auto;}
+
+.day-tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-bottom:10px;}
+.day-tabs::-webkit-scrollbar{display:none;}
+.day-tab{flex:0 0 auto;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;text-align:center;min-width:52px;}
+.day-tab .wd{font-weight:700;font-size:.8rem;display:block;}
+.day-tab .dt{font-size:.64rem;color:var(--ink-mute);display:block;margin-top:1px;}
+.day-tab[aria-selected="true"]{background:var(--surface-2);border-color:var(--accent);}
+
+.slots{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.slot{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;}
+.slot .time{font-weight:700;font-size:.85rem;}
+.slot .wind-line{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;}
+.slot .wind-line .kmh{font-size:1rem;font-weight:600;}
+.slot .wind-line .gust{font-size:.72rem;color:var(--ink-mute);}
+.slot .extra{display:flex;gap:9px;margin-top:3px;font-size:.7rem;color:var(--ink-mute);flex-wrap:wrap;}
+.pill{padding:3px 9px;border-radius:999px;font-size:.68rem;font-weight:700;white-space:nowrap;}
+.pill.bom{background:var(--good-bg);color:var(--good);}
+.pill.moderado{background:var(--warn-bg);color:var(--warn);}
+.pill.nao{background:var(--bad-bg);color:var(--bad);}
+.pill.semdado{background:var(--mute-badge-bg);color:var(--ink-mute);}
+
+.tech-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
+.tech-row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:.84rem;}
+.tech-row:last-child{border-bottom:none;}
+.tech-row .k{color:var(--ink-mute);}
+.tech-row .v{font-weight:600;text-align:right;}
+
+.notice{font-size:.76rem;color:var(--ink-mute);background:var(--surface-2);border-radius:10px;padding:10px 12px;margin-bottom:14px;}
+.notice.err{background:var(--bad-bg);color:var(--bad);}
+.notice.ok{background:var(--good-bg);color:var(--good);}
+
+footer{margin-top:8px;padding-top:14px;border-top:1px solid var(--line);font-size:.72rem;color:var(--ink-mute);line-height:1.6;}
+footer a{color:var(--ink-mute);text-decoration:underline;}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;vertical-align:-2px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <div><h1 id="pageTitle">Bola de Cristal</h1><span class="tag" id="pageTag">Levados Fly · rampas do sudeste</span></div>
+    <button class="back" id="backBtn" hidden>← voltar</button>
+  </div>
+  <div id="listControls">
+    <div class="search-wrap">
+      <input class="search-input" id="searchInput" type="search" inputmode="search" placeholder="Buscar rampa, cidade ou local...">
+    </div>
+    <div class="state-chips" id="stateChips"></div>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer id="footerNote">
+  Vento, chuva, nuvens e pressão vêm ao vivo do Open-Meteo (modelo GFS/ECMWF) direto do seu celular. Rampas e dados técnicos (altitude, quadrantes de vento, acesso) foram levantados manualmente a partir do Guia 4 Ventos e CBVL — confirme sempre com a associação local antes de voar.
+  <br><br>Fontes: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> · <a href="https://guia4ventos.com.br" target="_blank" rel="noopener">Guia 4 Ventos</a> · <a href="https://www.cbvl.esp.br" target="_blank" rel="noopener">CBVL</a>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
